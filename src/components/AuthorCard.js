@@ -24,7 +24,7 @@ export default function AuthorCard({ authorObj, onUpdate }) {
         </Card.Title>
         <p className="card-text bold">{authorObj.email}</p>
         {/* DYNAMIC LINK TO VIEW THE BOOK DETAILS  */}
-        <Link href={`/authors/${authorObj.firebaseKey}`} passHref>
+        <Link href={`/author/${authorObj.firebaseKey}`} passHref>
           <Button variant="primary" className="m-2">
             VIEW
           </Button>
