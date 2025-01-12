@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
@@ -22,13 +24,13 @@ export default function AuthorCard({ authorObj, onUpdate }) {
         </Card.Title>
         <p className="card-text bold">{authorObj.email}</p>
         {/* DYNAMIC LINK TO VIEW THE BOOK DETAILS  */}
-        <Link href={`/author/${authorObj.firebaseKey}`} passHref>
+        <Link href={`/authors/${authorObj.firebaseKey}`} passHref>
           <Button variant="primary" className="m-2">
             VIEW
           </Button>
         </Link>
         {/* DYNAMIC LINK TO EDIT THE BOOK DETAILS  */}
-        <Link href={`/authors/edit/${authorObj.firebaseKey}`} passHref>
+        <Link href={`/author/edit/${authorObj.firebaseKey}`} passHref>
           <Button variant="info">EDIT</Button>
         </Link>
         <Button variant="danger" onClick={deleteAuthor} className="m-2">
