@@ -2,6 +2,7 @@ import { clientCredentials } from '../utils/client';
 
 const endpoint = clientCredentials.databaseURL;
 
+// FIXME:  GET ALL AUTHORS
 const getAuthors = (uid) =>
   new Promise((resolve, reject) => {
     fetch(`${endpoint}/authors.json?orderBy="uid"&equalTo="${uid}"`, {
@@ -22,7 +23,19 @@ const getAuthors = (uid) =>
   });
 
 // FIXME: CREATE AUTHOR
-const createAuthor = () => {};
+const createAuthor = (payload) =>
+  new Promise((resolve, reject) => {
+    fetch(`${endpoint}/authors.json`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => response.json())
+      .then((data) => resolve(data))
+      .catch(reject);
+  });
 
 // FIXME: GET SINGLE AUTHOR
 const getSingleAuthor = (firebaseKey) =>
@@ -35,6 +48,22 @@ const getSingleAuthor = (firebaseKey) =>
     })
       .then((response) => response.json())
       .then((data) => resolve(data))
+      .catch(reject);
+  });
+// filter by fav authors
+const favAuthors = (uid) =>
+  new Promise((resolve, reject) => {
+    fetch(`${endpoint}/authors.json?orderBy="uid"&equalTo="${uid}"`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const favAuth = Object.values(data).filter((item) => item.favorite);
+        resolve(favAuth);
+      })
       .catch(reject);
   });
 
@@ -53,25 +82,32 @@ const deleteSingleAuthor = (firebaseKey) =>
   });
 
 // FIXME: UPDATE AUTHOR
-const updateAuthor = () => {};
+const updateAuthor = (payload) =>
+  new Promise((resolve, reject) => {
+    fetch(`${endpoint}/authors/${payload.firebaseKey}.json`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => response.json())
+      .then(resolve)
+      .catch(reject);
+  });
 
 // TODO: GET A SINGLE AUTHOR'S BOOKS
-const getAuthorBooks = () => {};
-
-const favoriteAuthors = (uid) =>
+const getAuthorBooks = (firebaseKey) =>
   new Promise((resolve, reject) => {
-    fetch(`${endpoint}/authors.json?orderBy="uid"&equalTo="${uid}"`, {
+    fetch(`${endpoint}/books.json?orderBy="author_id"&equalTo="${firebaseKey}"`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        const favorites = Object.values(data).filter((item) => item.favorite);
-        resolve(favorites);
-      })
+      .then((data) => resolve(Object.values(data)))
       .catch(reject);
   });
 
-export { getAuthors, createAuthor, getSingleAuthor, deleteSingleAuthor, updateAuthor, favoriteAuthors, getAuthorBooks };
+export { getAuthors, createAuthor, getSingleAuthor, deleteSingleAuthor, updateAuthor, getAuthorBooks, favAuthors };
